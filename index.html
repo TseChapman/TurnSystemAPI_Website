@@ -159,7 +159,7 @@
 				be achieved by building the Settings like so:<br>
 				<pre
 					><code
-					>const settingsBuilder = new Settings.Builder()<br
+					>const settingsBuilder = new Settings.Builder();<br
 					>settingsBuilder.setTurnType('timed');<br
 					>settingsBuilder.setTurnTime(60);</code
 				></pre>
@@ -182,6 +182,8 @@
 				<P>
 					Set the conditional function by passing the function into Setting.Builder object:
 					<pre><code
+						>const settingsBuilder = new Settings.Builder();<br
+						>settingsBuilder.setTurnType('conditional');<br
 						>settingsBuilder.setCallbackFunction(conditionalFunction);<br
 					></code></pre>
 					<p>
@@ -219,7 +221,7 @@
 					To add players, the developer can self-define a user object that extends from the UserState class and add the user object to the turn system.
 					<pre><code
 						>const user = new UserState();<br
-						>this.turnSystem.addUser(user)<br
+						>this.turnSystem.addUser(user);<br
 					></code></pre>
 				</p>
 				<p>
