@@ -17,6 +17,18 @@
 	<link rel="stylesheet" type="text/css" href="src/utils/css/util.css">
 
 	<!-- FONT -->
+
+		<!-- JAVASCRIPT FILES -->
+		<!-- jQuery -->
+		<script type="text/javascript" src="https://code.jquery.com/jquery-3.5.1.slim.min.js"
+			integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
+		
+		<!-- Bootstrap -->
+		<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/js/bootstrap.bundle.min.js"
+			integrity="sha384-ho+j7jyWK8fNQe+A12Hb8AhRq26LrZ/JpcUGGOn+Y7RsweNrtN/tE3MoK7ZeZDyx" crossorigin="anonymous"></script>
+		<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/10.6.0/styles/atom-one-dark.min.css">
+		<script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/10.6.0/highlight.min.js"></script>
+		<script>hljs.highlightAll();</script>
 </head>
 <body>
 	<!-- NAVBAR -->
@@ -31,7 +43,7 @@
 
 			<!-- Navbar Items -->
 			<div class="col-lg-3 col-md-3 col-sm-3 col-xs-4">
-				<a class="navbarLink" href="#description">Modeul Description</a>
+				<a class="navbarLink" href="#description">Module Description</a>
 			</div>
 			<div class="col-lg-2 col-md-2 col-sm-2 col-xs-4">
 				<a class="navbarLink" href="#tutorial">Tutorial</a>
@@ -60,13 +72,13 @@
 	<div class="container">
 		<h1 id="description" class="section"><b>Module Description</b></h1>
 		<div>
-			The TurnSystem API provieds a local turn system. Users can create a turn system that can adapt to different turn types (Timed, Conditional, Priority). 
+			The TurnSystem API provides a local turn system. Users can create a turn system that can adapt to different turn types (Timed, Conditional, Priority). 
 			<br>
 			<br>
 			There are <b>3 main classes</b> in the API: <b>Setting.Builder</b>, <b>Setting</b>, and <b>TurnSystem</b>. There is also <b>1 supportive class</b> in the API: <b>UserState</b>.
 			<b>Setting.Builder</b> class allows the developer to set the turn type, max number of player allowed, and required parameters based on the turn type. 
-			<b>Setting</b> class must be built using the Setting.Builder class. It provide functions that allows the developer to access the parameters setted by the Setting.Builder object. 
-			At last, the <b>TurnSystem</b> Object must be initialize by the Setting object. It provieds function for switching turns, getting user's information within the turn system, and adding/removing users.
+			<b>Setting</b> class must be built using the Setting.Builder class. It provide functions that allows the developer to access the parameters set by the Setting.Builder object. 
+			At last, the <b>TurnSystem</b> Object must be initialize by the Setting object. It provides function for switching turns, getting user's information within the turn system, and adding/removing users.
 			<br>
 			<br>
 			The API only supports <b>2 or more user</b> in the turn system. 
@@ -84,8 +96,13 @@
 				To get started on using the turn system, you must download the folder, locate the folder inside src folder, and include the API javascript files in the index.html in the project.
 				<br>
 				<br>
-				Add the following lines above you scene files in the index.html:
-				<img src="src/img/getStarted.png" style="width: 100%">
+				Add the following lines above your scene files in the index.html:
+				<pre><code
+					>&lt;script type=&quot;text/javascript&quot; src=&quot;src/TurnSystemAPI/Settings.js&quot;&gt;&lt;/script&gt;<br
+					>&lt;script type=&quot;text/javascript&quot; src=&quot;src/TurnSystemAPI/TurnSystem.js&quot;&gt;&lt;/script&gt;<br
+					>&lt;script type=&quot;text/javascript&quot; src=&quot;src/TurnSystemAPI/UserState.js&quot;&gt;&lt;/script&gt;<br
+					>&lt;script type=&quot;text/javascript&quot; src=&quot;src/TurnSystemAPI/Action.js&quot;&gt;&lt;/script&gt;</code
+				></pre>
 			</p>
 		</div>
 		<br>
@@ -105,7 +122,11 @@
 					Do the following <b>4 steps</b> to initialize the turn system:
 					<p> <!-- Start of Step 1 -->
 						1. Construct the Setting.Builder class:
-						<img src="src/img/settingBuilderConstruct.png" style="width: 100%">
+						<pre><code
+							>const settingsBuilder = new Settings.Builder();<br
+							>settingsBuilder.setTurnType(this.mTurnType);<br
+							>settingsBuilder.setMaxUsers(this.mMaxPlayers);<br
+						></code></pre>
 					</p> <!-- End of Step 1 -->
 
 					<p> <!-- Start of Step 2 -->
@@ -114,12 +135,16 @@
 
 					<p> <!-- Start of Step 3 -->
 						3. Construct the Setting object using the Setting.Builder object:
-						<img src="src/img/settingConstruct.png" style="width: 100%">
+						<pre><code
+							>const settings = settingsBuilder.build();<br
+						></code></pre>
 					</p> <!-- End of Step 3 -->
 
 					<p> <!-- Start of Step 4 -->
 						4. Construct the TurnSystem object using the Setting object:
-						<img src="src/img/turnSystemConstruct.png" style="width: 100%">
+						<pre><code
+							>this.turnSystem = new TurnSystem(settings);<br
+						></code></pre>
 					</p> <!-- End of Step 4 -->
 
 				</p> <!-- End of Initialization Steps -->
@@ -128,6 +153,22 @@
 		<br>
 		<div id="setTimedTurnType">
 			<h2><i>How to Set Timed Turn-Type</i></h2>
+			<div>
+				To set the parameters for the timed turn-type, the developer must set the turn-type
+				to 'timed' and provide a time limit when constructing the Settings object. This can
+				be achieved by building the Settings like so:<br>
+				<pre
+					><code
+					>const settingsBuilder = new Settings.Builder();<br
+					>settingsBuilder.setTurnType('timed');<br
+					>settingsBuilder.setTurnTime(60);</code
+				></pre>
+					When building your scene, ensure to call TurnSystem's <em>calculateNextTurn()</em>
+					function within the update function of your scene.<br>
+				<em>You are not required to set a callback function for this turn type. If you do set a 
+					callback function, the turn system ignores it.
+				</em>
+			</div>
 		</div>
 		<br>
 		<div id="setConditionalTurnType">
@@ -140,7 +181,11 @@
 				</p>
 				<P>
 					Set the conditional function by passing the function into Setting.Builder object:
-					<img src="src/img/conditionalFunc.png" style="width: 100%">
+					<pre><code
+						>const settingsBuilder = new Settings.Builder();<br
+						>settingsBuilder.setTurnType('conditional');<br
+						>settingsBuilder.setCallbackFunction(conditionalFunction);<br
+					></code></pre>
 					<p>
 						<i>Tips: If the user object is extended from UserState, turn isMetCondition to true when condition is made. For condition function, pass a function that return isMetCondition. TurnSystem will reset isMetCondition when condition is true.</i>
 					</p>
@@ -150,6 +195,23 @@
 		<br>
 		<div id="setPriorityTurnType">
 			<h2><i>How to Set Priority Turn-Type</i></h2>
+			<div>
+				The priority turn-type, like the conditional turn-type, require a callback function
+				when creating your Settings object. The callback function you provide must accept a single 
+				parameter, an array of UserStates. The callback function should sort the array based on the 
+				conditions/priorities the developer decides on. To use the priority turn-type follow the code 
+				below:<br>
+				<pre
+				><code class="javascript">const settingsBuilder = new Settings.Builder();<br
+					>settingsBuilder.setTurnType('priority');<br
+					>settings.builder.setCallbackFunction((usersArr) => userArr.sort());<br
+					></code
+				></pre>
+				Where to call TurnSystem's calculateNextTurn() is flexible here. You could call it within your 
+				Scene's update function, and have the array repeatedly be sorted. However, you can also limit the 
+				calls to calculateNextTurn() by only calling it when necessary. For example, if you have users that 
+				roll dice, you can call calculateNextTurn() after all users have rolled.  
+			</div>
 		</div>	
 		<br>
 		<div id="addRemovePlayer">
@@ -157,11 +219,17 @@
 			<p>
 				<p>
 					To add players, the developer can self-define a user object that extends from the UserState class and add the user object to the turn system.
-					<img src="src/img/addPlayer.png" style="width: 100%">
+					<pre><code
+						>const user = new UserState();<br
+						>this.turnSystem.addUser(user);<br
+					></code></pre>
 				</p>
 				<p>
 					To remove a specific player, the developer can get the user object by index inside the TurnSystem storage. The developer should use some self-define parameters to locate specific user and then remove the user from the system by:
-					<img src="src/img/removePlayer.png" style="width: 100%">
+					<pre><code
+						>const lastPlayer = this.turnSystem.getUserByIndex(this.numPlayers - 1);<br
+						>this.turnSystem.removeUser(lastPlayer);<br
+					></code></pre>
 				</p>
 			</p>
 		</div>
@@ -171,7 +239,9 @@
 			<p>
 				<p>
 					To check if it is time to switch turns based on the turn type. Call the function to calculate if it is time to switch turn:
-					<img src="src/img/switchTurn.png" style="width: 100%">
+					<pre><code
+						>this.turnSystem.calculateNextTurn();<br
+					></code></pre>
 				</p>
 			</p>
 		</div>
@@ -183,13 +253,13 @@
 	<div class="container">
 		<h1 id="documentation" class="section"><b>Documentation</b></h1>
 
-		<!-- Setting.js -->
-		<div id="settingJS">
+		<!-- Settings.js -->
+		<div id="settingsJS">
 			<div>
-				<h2><i>Setting.js</i></h2>
-				<!-- Setting.Builder class-->
+				<h2><i>Settings.js</i></h2>
+				<!-- Settings.Builder class-->
 				<div>
-					<h3>Setting.Builder</h3>
+					<h3>Settings.Builder</h3>
 					<table style="width: 100%">
 						<tr> <!-- Table Header -->
 							<th>Function Names</th>
@@ -198,8 +268,8 @@
 							<th>Return Type (if any)</th>
 						</tr>
 						<tr> <!-- Constructor-->
-							<td>Setting.Builder()</td>
-							<td>Constructor of the Setting.Builder class</td>
+							<td>Settings.Builder()</td>
+							<td>Constructor of the Settings.Builder class</td>
 							<td>None</td>
 							<td>None</td>
 						</tr>
@@ -223,22 +293,22 @@
 						</tr>
 						<tr> <!-- setTurnTime(time) -->
 							<td>setTurnTime(time)</td>
-							<td>Set the timer for 'timed' turn-type</td>
+							<td>Set the timer for 'timed' turn-type. Value should be in seconds.</td>
 							<td>time : Number</td>
 							<td>None</td>
 						</tr>
 						<tr> <!-- build() -->
 							<td>build()</td>
-							<td>Build and return the Setting object</td>
+							<td>Build and return the Settings object</td>
 							<td>None</td>
 							<td>Setting</td>
 						</tr>
 					</table>
 				</div>
 				<br>
-				<!-- Setting class -->
+				<!-- Settings class -->
 				<div>
-					<h3>Setting</h3>
+					<h3>Settings</h3>
 					<table style="width: 100%">
 						<tr> <!-- Table Header -->
 							<th>Function Names</th>
@@ -247,8 +317,8 @@
 							<th>Return Type (if any)</th>
 						</tr>
 						<tr> <!-- Constructor-->
-							<td>Setting(builder)</td>
-							<td>Constructor of the Setting class</td>
+							<td>Settings(builder)</td>
+							<td>Constructor of the Settings class</td>
 							<td>builder : Setting.Builder</td>
 							<td>None</td>
 						</tr>
@@ -289,7 +359,7 @@
 				<h2><i>TurnSystem.js</i></h2>
 				<!-- TurnSystem class -->
 				<div>
-					<h3>TurnSyetm</h3>
+					<h3>TurnSystem</h3>
 					<table style="width: 100%">
 						<tr> <!-- Table Header -->
 							<th>Function Names</th>
@@ -300,7 +370,7 @@
 						<tr> <!-- Constructor-->
 							<td>TurnSystem(settings)</td>
 							<td>Constructor of the TurnSystem class</td>
-							<td>settings : Setting</td>
+							<td>settings : Settings</td>
 							<td>None</td>
 						</tr>
 						<tr> <!-- calculateNextTurn() -->
@@ -325,25 +395,25 @@
 							<td>getCurrentUser()</td>
 							<td>Returns the current user object</td>
 							<td>None</td>
-							<td>Developer defined User object</td>
+							<td>the current UserState instance</td>
 						</tr>
 						<tr> <!-- getNextUser() -->
 							<td>getNextUser()</td>
 							<td>Returns the user that immediately succeeds the current user</td>
 							<td>None</td>
-							<td>Developer defined User object</td>
+							<td>a UserState instance</td>
 						</tr>
 						<tr> <!-- getUserByIndex(index) -->
 							<td>getUserByIndex(index)</td>
 							<td>Return the user at specific index</td>
 							<td>index : Number</td>
-							<td>Developer defined User object</td>
+							<td>the  UserState instance at the provided index, if any.</td>
 						</tr>
 						<tr> <!-- getAllUsers() -->
 							<td>getAllUsers()</td>
 							<td>Return the list of all users</td>
 							<td>None</td>
-							<td>List of developer defined User object</td>
+							<td>List of all UserState instances</td>
 						</tr>
 						<tr> <!-- getNumUsers() -->
 							<td>getNumUsers()</td>
@@ -354,13 +424,13 @@
 						<tr> <!-- addUser(user) -->
 							<td>addUser(user)</td>
 							<td>Returns true if the user passed in is successfully added. Otherwise, returns false.</td>
-							<td>user : Developer defined User object</td>
+							<td>user : UserState</td>
 							<td>Boolean</td>
 						</tr>
 						<tr> <!-- removeUser(user) -->
 							<td>removeUser(user)</td>
 							<td>Returns true if the user passed in is successfully removed. Otherwise, returns false.</td>
-							<td>user : Developer defined User object</td>
+							<td>user : UserState</td>
 							<td>Boolean</td>
 						</tr>
 					</table>
@@ -377,17 +447,86 @@
 				<!-- UserState class -->
 				<div>
 					<h3>UserState</h3>
+					<sub>
+						<em>This is not a class, and should instead be treated as an interface.</em>
+					</sub>
+					<table style="width: 100%">
+						<tr>
+							<!-- Table Header -->
+							<th>Function Names</th>
+							<th>Description</th>
+							<th>Parameter(s) (if any)</th>
+							<th>Return Type (if any)</th>
+						</tr>
+						<tr>
+							<!-- Constructor -->
+							<td>UserState()</td>
+							<td>Constructor of the UserState class</td>
+							<td>None.</td>
+							<td>None.</td>
+						</tr>
+						<tr>
+							<!-- Initialize -->
+							<td>initialize()</td>
+							<td>Initializes the UserState Object</td>
+							<td>None.</td>
+							<td>None.</td>
+						</tr>
+						<tr>
+							<!-- Update -->
+							<td>update()</td>
+							<td>Updates the state of the UserState object.</td>
+							<td>None.</td>
+							<td>None.</td>
+						</tr>
+						<tr>
+							<!-- Action -->
+							<td>action()</td>
+							<td>If the user can do an action of some sort, execute it. Should return an Action class object.</td>
+							<td>None.</td>
+							<td>None.</td>
+						</tr>
+						<tr>
+							<!-- Equals -->
+							<td>equals(otherUserState)</td>
+							<td>Checks if two UserState objects are the same.</td>
+							<td>otherUserState: UserState</td>
+							<td>Boolean: true if the UserStates are equal.</td>
+						</tr>
+					</table>
+				</div>
+			</div>
+		</div>
+		<div id="actionJS">
+			<div>
+				<h2><i>Action.js</i></h2>
+				<!-- UserState class -->
+				<div>
+					<h3>Action</h3>
+					<sub>
+						<em>This is not a class, and should instead be treated as an interface.</em>
+					</sub>
+					<table style="width: 100%">
+						<tr>
+							<!-- Table Header -->
+							<th>Function Names</th>
+							<th>Description</th>
+							<th>Parameter(s) (if any)</th>
+							<th>Return Type (if any)</th>
+						</tr>
+						<tr>
+							<!-- Constructor -->
+							<td>Action(user, action)</td>
+							<td>Constructor of the Action class</td>
+							<td>Sets the properties for the Action class. User should be a UserState instance.
+								Action should be the result of the UserState action() function, whatever it may be.
+							</td>
+							<td>None.</td>
+						</tr>
+					</table>
 				</div>
 			</div>
 		</div>
 	</div>
-
-	<!-- JAVASCRIPT FILES -->
-		<!-- jQuery -->
-	<script type="text/javascript" src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
-
-	<!-- Bootstrap -->
-	<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ho+j7jyWK8fNQe+A12Hb8AhRq26LrZ/JpcUGGOn+Y7RsweNrtN/tE3MoK7ZeZDyx" crossorigin="anonymous"></script>
-
 </body>
 </html>
